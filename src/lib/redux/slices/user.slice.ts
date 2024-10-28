@@ -15,6 +15,8 @@ export const userSlice = createSlice({
   initialState: initialUser as TUser,
   reducers: {
     login: (state, action: PayloadAction<TUser>) => {
+      console.log("payload", action.payload);
+
       state.id = action.payload.id;
       state.username = action.payload.username;
       state.email = action.payload.email;

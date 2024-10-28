@@ -8,14 +8,15 @@ import { jwtDecode } from "jwt-decode";
 export const userLogin = ({ username, password }: TUser) => {
   return async (dispatch: Dispatch) => {
     try {
-      await axiosInstance().post(
+      const response = await axiosInstance().post(
         "/users/login",
         { username, password },
         { withCredentials: true }
       );
-      const access_token = getCookie("access_token") || "";
-      if (access_token) {
-        const user: TUser = jwtDecode(access_token);
+      const user: TUser = response.data.user;
+      console.log(user);
+
+      if (user) {
         dispatch(login(user));
       } else {
         throw new Error("Can't get access token");
