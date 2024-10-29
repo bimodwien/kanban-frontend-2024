@@ -1,9 +1,8 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { axiosInstance } from "@/lib/axios";
-import { login } from "../slices/user.slice";
+import { login, logout } from "../slices/user.slice";
 import { TUser } from "@/models/user.model";
-import { deleteCookie, getCookie } from "cookies-next";
-import { jwtDecode } from "jwt-decode";
+import { deleteCookie } from "cookies-next";
 
 export const userLogin = ({ username, password }: TUser) => {
   return async (dispatch: Dispatch) => {
@@ -14,8 +13,6 @@ export const userLogin = ({ username, password }: TUser) => {
         { withCredentials: true }
       );
       const user: TUser = response.data.user;
-      console.log(user);
-
       if (user) {
         dispatch(login(user));
       } else {
@@ -30,16 +27,18 @@ export const userLogin = ({ username, password }: TUser) => {
 };
 
 export function keepLogin() {
-  return async function dispatch(dispatch: Dispatch) {
+  return async (dispatch: Dispatch) => {
     try {
-      const token = getCookie("access_token") || "";
-      const decode = jwtDecode(token!) as { user: TUser };
-      if (token) {
-        dispatch(login(decode?.user));
+      const response = await axiosInstance().get("/users/keep-login");
+      const user: TUser = response.data.user;
+      if (user) {
+        dispatch(login(user));
+      } else {
+        dispatch(logout());
       }
     } catch (error) {
-      console.log(error);
-      deleteCookie("access_token");
+      dispatch(logout());
+      throw error;
     }
   };
 }

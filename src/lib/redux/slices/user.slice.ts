@@ -1,37 +1,36 @@
 import { TUser } from "@/models/user.model";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteCookie } from "cookies-next";
 
-const initialUser = {
+interface AuthState extends TUser {
+  isLoaded: boolean;
+}
+
+const initialUser: AuthState = {
   id: "",
   username: "",
   email: "",
   fullName: "",
-  password: "",
+  isLoaded: false,
 };
 
 export const userSlice = createSlice({
   name: "auth",
-  initialState: initialUser as TUser,
+  initialState: initialUser,
   reducers: {
     login: (state, action: PayloadAction<TUser>) => {
-      console.log("payload", action.payload);
-
       state.id = action.payload.id;
       state.username = action.payload.username;
       state.email = action.payload.email;
       state.fullName = action.payload.fullName;
-      state.password = action.payload.password;
+      state.isLoaded = true;
       return state;
     },
     logout: (state) => {
-      deleteCookie("access_token");
-      deleteCookie("refresh_token");
       state.id = initialUser.id;
       state.username = initialUser.username;
       state.email = initialUser.email;
       state.fullName = initialUser.fullName;
-      state.password = initialUser.password;
+      state.isLoaded = true;
       return state;
     },
   },

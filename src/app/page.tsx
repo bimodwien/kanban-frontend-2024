@@ -8,8 +8,10 @@ import EditModal from "@/components/EditModal";
 import Swal from "sweetalert2";
 import { TTodos } from "@/models/todo.models";
 import { fetchTodo, deleteTodo } from "@/helpers/fetchTodo";
+import { useAuthRedirect } from "@/hooks/user.auth.redirect";
 
 export default function Home() {
+  useAuthRedirect();
   const [todos, setTodos] = useState<TTodos[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<TTodos | null>(null);
