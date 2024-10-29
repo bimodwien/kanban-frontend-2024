@@ -4,7 +4,7 @@ import { getCookie } from "cookies-next";
 export function axiosInstance(): AxiosInstance {
   const token = getCookie("access_token") || "";
   return axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+    baseURL: "https://kanban-backend-2024-production.up.railway.app/api/",
     headers: {
       Authorization: `Bearer ${token}`,
     },
