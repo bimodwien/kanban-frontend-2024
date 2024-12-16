@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-import { getCookie } from "cookies-next";
 
 export function axiosInstance(): AxiosInstance {
   return axios.create({
